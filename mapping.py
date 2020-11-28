@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models.resnet import BasicBlock # ResNet Block
+from torchvision.models.resnet import BasicBlock  # ResNet Block
 
 
 class Mapping(nn.Module):
@@ -10,45 +10,51 @@ class Mapping(nn.Module):
         """
         Initialize the model structure following the paper
         """
+        super(Mapping, self).__init__()
+        # Using InstanceNorm2D since it seems that is what is preferred in the paper (for facial enhancement, but still).
+
         # First 3 conv2d layers
-        self.conv1 = nn.Sequential(nn.Conv2d(64, 128, 3, stride=1),
-                                    nn.InstaceNorm2d(64),
-                                    nn.ReLU(),
-                                    nn.Conv2d(128, 256, 3, stride=1), 
-                                    nn.InstanceNorm2d(64),
-                                    nn.ReLU(), 
-                                    nn.Conv2d(256, 512, 3, stride=1), 
-                                    nn.InstanceNorm2d(64),
-                                    nn.ReLU()
-                                    )
-        
-        #ResNet Blocks x 6
-        self.resblocks = nn.Sequential(BasicBlock(512, 512),
-                                        nn.InstanceNorm2d(64),
-                                        BasicBlock(512, 512),
-                                        nn.InstanceNorm2d(64),
-                                        BasicBlock(512, 512),
-                                        nn.InstanceNorm2d(64),
-                                        BasicBlock(512, 512),
-                                        nn.InstanceNorm2d(64),
-                                        BasicBlock(512, 512),
-                                        nn.InstanceNorm2d(64),
-                                        BasicBlock(512, 512)
-                                        nn.InstanceNorm2d(64),
-                                        )
-        
-        # Second batch of conv2d layer 
-        self.conv2 = nn.Sequential(nn.Conv2d(512, 256, 3, stride=1),
-                            nn.InstaceNorm2d(64),
-                            nn.ReLU(),
-                            nn.Conv2d(256, 128, 3, stride=1), 
-                            nn.InstanceNorm2d(64),
-                            nn.ReLU(), 
-                            nn.Conv2d(128, 64, 3, stride=1), 
-                            nn.InstanceNorm2d(64),
-                            nn.ReLU()
-                            )
-        
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(64, 128, 3, stride=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(128, 256, 3, stride=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(256, 512, 3, stride=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(),
+        )
+
+        # ResNet Blocks x 6
+        self.resblocks = nn.Sequential(
+            BasicBlock(512, 512),
+            nn.InstanceNorm2d(64),
+            BasicBlock(512, 512),
+            nn.InstanceNorm2d(64),
+            BasicBlock(512, 512),
+            nn.InstanceNorm2d(64),
+            BasicBlock(512, 512),
+            nn.InstanceNorm2d(64),
+            BasicBlock(512, 512),
+            nn.InstanceNorm2d(64),
+            BasicBlock(512, 512),
+            nn.InstanceNorm2d(64),
+        )
+
+        # Second batch of conv2d layer
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(512, 256, 3, stride=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(256, 128, 3, stride=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(128, 64, 3, stride=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(),
+        )
+
         def forward(self, x):
             """
             Execute forward pass in the model
@@ -64,4 +70,3 @@ class Mapping(nn.Module):
             out = self.resblocks(out)
             out = self.conv2(out)
             return out
-
