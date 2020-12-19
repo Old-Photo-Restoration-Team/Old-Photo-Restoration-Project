@@ -1,6 +1,6 @@
 # Old-Photo-Restoration-Project
 
-**Name:** Old Photo Restoration via Deep Latent Space Translation
+**Name:** Old Photo Restoration via Deep Latent Space Translation <br />
 **Article:** https://arxiv.org/pdf/2009.07047v1.pdf
 
 **Saved Model Parameters:** https://drive.google.com/drive/folders/1568SVd684USu2Cr5F6NRv562WtT6wnTO?usp=sharing
