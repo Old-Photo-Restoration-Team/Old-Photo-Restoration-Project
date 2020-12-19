@@ -6,6 +6,10 @@ import tqdm
 from torch.utils.data import random_split
 from matplotlib import pyplot as plt
 
+from data import FakeandRealOldPhotosGenerator
+from utils import display_images
+from model import .
+
 
 torch.manual_seed(1)
 torch.cuda.manual_seed(1)
